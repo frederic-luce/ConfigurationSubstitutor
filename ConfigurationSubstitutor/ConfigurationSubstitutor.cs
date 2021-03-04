@@ -31,10 +31,10 @@ namespace ConfigurationSubstitution
             var value = configuration[key];
             if (string.IsNullOrWhiteSpace(value)) return value;
 
-            return ApplySubstitution(configuration, value);
+            return ApplySubstitution(configuration, value, 10);
         }
 
-        public string ApplySubstitution(IConfiguration configuration, string value)
+        public string ApplySubstitution(IConfiguration configuration, string value, int maxlevel=0)
         {
             var captures = _findSubstitutions.Matches(value).Cast<Match>().SelectMany(m => m.Captures.Cast<Capture>());
             foreach (var capture in captures)
@@ -44,6 +44,14 @@ namespace ConfigurationSubstitution
                 if (substitutedValue == null && _exceptionOnMissingVariables)
                 {
                     throw new UndefinedConfigVariableException($"{_startsWith}{capture.Value}{_endsWith}");
+                }
+
+                if (substitutedValue!=null)
+                {
+                    if (maxlevel>=0)
+                        substitutedValue = ApplySubstitution(configuration, substitutedValue, maxlevel-1);
+                    else
+                        throw new LoopDetectedException($"{_startsWith}{capture.Value}{_endsWith}");
                 }
 
                 value = value.Replace(_startsWith + capture.Value + _endsWith, substitutedValue);

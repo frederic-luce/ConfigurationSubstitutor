@@ -248,5 +248,46 @@ namespace ConfigurationSubstitution.Tests
 
             substituted.Should().Be("Hello $(Var what's up ?");
         }
+
+        [Fact]
+        public void Should_recursively_substitute_value()
+        {
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    { "Foo", "bob{Bar1}bill" },
+                    { "Bar1", "a{Bar2}b" },
+                    { "Bar2", "-Jean-" }
+                })
+                .EnableSubstitutions();
+
+            var configuration = configurationBuilder.Build();
+
+            // Act
+            var substituted = configuration["Foo"];
+
+            substituted.Should().Be("boba-Jean-bbill");
+        }
+
+        [Fact]
+        public void Should_throw_when_loop_detected()
+        {
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "Foo", "bob{Bar1}bill" },
+                    { "Bar1", "a{Bar2}b" },
+                    { "Bar2", "-{Bar1}-" }
+                })
+                .EnableSubstitutions();
+
+            var configuration = configurationBuilder.Build();
+
+            // Act
+            Action act = () => _ = configuration["Foo"];
+
+            act.Should().Throw<LoopDetectedException>().WithMessage("*variable*{Bar*}*");
+        }
+
     }
 }
