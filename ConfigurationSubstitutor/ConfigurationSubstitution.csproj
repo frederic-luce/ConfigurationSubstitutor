@@ -3,22 +3,26 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>ConfigurationSubstitutor</PackageId>
-    <Authors>molinch</Authors>
-    <Company>Fabien Molinet</Company>
+    <Authors>Frédéric Luce</Authors>
+    <Company>Frédéric Luce</Company>
     <Product>ConfigurationSubstitutor</Product>
     <Description>
+      Forked from Fabien Molinet's https://github.com/molinch/ConfigurationSubstitutor
+
       Allows to substitute variables from configuration, this way hostnames, or passwords can be separated and automatically substituted if another configuration entry references them.
       Scenarios could be that you have the password from an Azure KeyVault and the connection string defined in appsettings. The connection string can reference the password.
       Another scenario is that you have multiple configuration entries for the same domain, don't duplicate that information anymore, reference it.
+      Original
     </Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo.png</PackageIcon>
-    <RepositoryUrl>https://github.com/molinch/ConfigurationSubstitutor</RepositoryUrl>
+    <RepositoryUrl>https://github.com/frederic-luce/ConfigurationSubstitutor</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageProjectUrl>https://github.com/molinch/ConfigurationSubstitutor</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/frederic-luce/ConfigurationSubstitutor</PackageProjectUrl>
     <PackageTags>netcore options configuration substitute substitution substituted variable aspnet</PackageTags>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
